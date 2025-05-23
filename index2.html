@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Favicon -->
+    <link rel="icon" href="https://cdn.jsdelivr.net/npm/simple-icons@v14/icons/react.svg" type="image/svg+xml" />
+    <title>Ranjit Subedi | Senior Frontend Engineer</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --bg: #111;
+        --bg-alt: #1a1a1a;
+        --text: #f5f5f5;
+        --accent: #c0a16b;
+        --shadow: rgba(0, 0, 0, 0.7);
+      }
+      body.light-mode {
+        --bg: #f5f5f5;
+        --bg-alt: #ffffff;
+        --text: #1a1a1a;
+        --accent: #c0a16b;
+        --shadow: rgba(0, 0, 0, 0.1);
+      }
+      /* Light-mode navbar & hero overrides */
+      body.light-mode nav {
+        background: rgba(255, 255, 255, 0.85);
+      }
+      body.light-mode .nav-container a {
+        color: var(--text);
+      }
+      body.light-mode .nav-container a:hover {
+        color: var(--accent);
+      }
+      body.light-mode #intro {
+        background: var(--bg-alt) !important;
+      }
+      body.light-mode #intro::before {
+        background: rgba(255, 255, 255, 0.6) !important;
+      }
+      body.light-mode #intro h1,
+      body.light-mode #intro h2,
+      body.light-mode .intro-highlights,
+      body.light-mode .badge {
+        color: var(--text);
+      }
+      body.light-mode .badge i {
+        color: var(--accent);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Poppins", sans-serif;
+        overflow-x: hidden;
+        transition: background 0.3s, color 0.3s;
+      }
+      #progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: var(--accent);
+        width: 0%;
+        z-index: 1100;
+      }
+      nav {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        background: rgba(26, 26, 26, 0.85);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+      }
+      .nav-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        padding: 1rem;
+      }
+      .nav-container a {
+        color: var(--text);
+        text-transform: uppercase;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.3s, transform 0.3s;
+      }
+      .nav-container a:hover {
+        color: var(--accent);
+        transform: scale(1.1);
+      }
+      #theme-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        background: var(--accent);
+        border: none;
+        padding: 0.6rem;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 1001;
+        transition: transform 0.3s;
+      }
+      #theme-toggle:hover {
+        transform: rotate(180deg);
+      }
+      section {
+        padding: 8rem 1rem;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .section-title {
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--accent);
+      }
+      /* Hero */
+      #intro {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: url("https://via.placeholder.com/1600x900") center/cover
+          no-repeat;
+        position: relative;
+      }
+      #intro::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+      }
+      #intro .content {
+        position: relative;
+        z-index: 1;
+      }
+      #intro h1 {
+        font-size: 3.5rem;
+        margin-bottom: 0.5rem;
+      }
+      #intro h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: var(--accent);
+      }
+      #intro p {
+        font-size: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      /* Intro adjustments */
+      #intro .content {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: left;
+      }
+      #intro h1 {
+        font-size: 5rem;
+        margin-bottom: 0.2rem;
+        line-height: 1.1;
+      }
+      #intro h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--accent);
+      }
+      #intro .subtitle {
+        font-size: 2rem;
+        margin-left: 0.3rem;
+        opacity: 0.9;
+      }
+      .intro-highlights {
+        font-size: 1.2rem;
+        width: 100%;
+        margin: 1rem 0 1.5rem 0 !important;
+        line-height: 1.6;
+        text-align: left;
+      }
+      .intro-badges {
+        display: flex;
+        gap: 3rem;
+        justify-content: flex-start !important;
+        margin: 2rem 0 0 0;
+      }
+      .badge {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+      }
+      .badge i {
+        font-size: 1.5rem;
+        color: var(--accent);
+      }
+
+      /* About */
+      #about {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+      #about img {
+        width: 200px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px var(--shadow);
+        transform: translateX(-50px);
+        opacity: 0;
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      #about img.visible {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      #about .text {
+        flex: 1;
+      }
+      #about p {
+        line-height: 1.7;
+      }
+      /* Experience */
+      #experience .timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .event {
+        background: var(--bg-alt);
+        padding: 1.5rem;
+        border-left: 4px solid var(--accent);
+        box-shadow: 0 4px 12px var(--shadow);
+        transition: box-shadow 0.3s, transform 0.3s;
+      }
+      .event:hover {
+        transform: translateX(10px);
+        box-shadow: 0 8px 24px var(--shadow);
+      }
+      .event h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+      }
+      .event .meta {
+        font-size: 0.9rem;
+        color: #999;
+        margin-left: 0.5rem;
+      }
+      .event .role {
+        font-style: italic;
+        color: #bbb;
+        margin-bottom: 1rem;
+      }
+      .event ul {
+        list-style: disc;
+        margin-left: 1.5rem;
+        color: #ccc;
+      }
+      .event ul li {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+      }
+      /* Projects */
+      #projects .project-list {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+      }
+      .project-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+      }
+      .project-item:nth-child(even) {
+        flex-direction: row-reverse;
+      }
+      .project-info {
+        flex: 1;
+      }
+      .project-info h3 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+      }
+      .project-info a {
+        color: var(--text);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+      }
+      .project-info a:hover {
+        color: var(--accent);
+      }
+      .project-info a i {
+        margin-right: 0.5rem;
+      }
+      .project-info p {
+        line-height: 1.6;
+        color: #bbb;
+      }
+      .project-meta {
+        margin-top: 1rem;
+        color: #999;
+        font-size: 0.9rem;
+      }
+      .project-image {
+        flex: 1;
+        max-width: 500px;
+        background: linear-gradient(
+          135deg,
+          rgba(192, 161, 107, 0.2),
+          rgba(140, 120, 81, 0.2)
+        );
+        padding: 1rem;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px var(--shadow);
+        transition: transform 0.3s;
+      }
+      .project-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 1rem;
+        display: block;
+      }
+      .project-item:hover .project-image {
+        transform: scale(1.02);
+      }
+      /* Skills */
+      #tools .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 1rem;
+        justify-items: center;
+        margin-top: 2rem;
+      }
+      .tool {
+        background: var(--bg-alt);
+        border-radius: 12px;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .tool:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px var(--shadow);
+      }
+      .tool i {
+        font-size: 2rem;
+        color: var(--accent);
+      }
+      .tool span {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        text-align: center;
+        color: var(--text);
+      }
+
+      /* Contact */
+      #contact p {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      .social {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+      }
+      .social a {
+        color: var(--text);
+        font-size: 2rem;
+        transition: color 0.3s, transform 0.3s;
+      }
+      .social a:hover {
+        color: var(--accent);
+        transform: scale(1.2);
+      }
+      footer {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: var(--bg-alt);
+        font-size: 0.85rem;
+      }
+
+      /* added styles by Ranjit */
+      .more-content-gap {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        justify-content: left;
+        align-items: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="progress-bar"></div>
+    <nav>
+      <div class="nav-container">
+        <a href="#intro">Home</a>
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#tools">Skills</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+    <button id="theme-toggle"><i class="fas fa-adjust"></i></button>
+
+    <section id="intro">
+      <div class="content container more-content-gap">
+        <h1>Ranjit Subedi</h1>
+        <h2>
+          Sr. Fullstack Engineer <span class="subtitle">(Frontend Heavy)</span>
+        </h2>
+        <p class="intro-highlights">
+          I’m passionate about <i class="fas fa-tools"></i> Architectural
+          Design, <i class="fas fa-vial"></i> Test Driven Development,
+          <i class="fas fa-rocket"></i> Performance Optimization, and
+          <i class="fas fa-star"></i> User Experience
+        </p>
+        <div class="intro-badges">
+          <div class="badge">
+            <i class="fas fa-graduation-cap"></i> Frontend Subject Matter Expert
+          </div>
+          <div class="badge">
+            <i class="fab fa-github"></i> Open Source Contributor
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div class="text">
+          <p>
+            I'm a Frontend Engineer passionate about crafting fast, accessible,
+            and responsive web experiences. I specialize in modern JavaScript
+            frameworks like React and Next.js, and bring designs to life using
+            Tailwind CSS, CSS-in-JS, and reusable component architectures. I
+            care deeply about performance, WCAG accessibility, and seamless
+            UX—from pixel-perfect visuals to intuitive interactions.
+          </p>
+          <br />
+          <p>
+            Beyond the frontend, I also work across the stack with Node.js,
+            Express, and MongoDB, and I’ve recently been building AI-driven
+            applications using LangChain, LangGraph, and OpenAI APIs to create
+            intelligent, real-time user experiences.
+          </p>
+        </div>
+        <!-- <img src="https://via.placeholder.com/200" alt="Profile Snapshot" class="visible"> -->
+      </div>
+    </section>
+
+    <!-- <section id="experience">
+      <div class="container">
+        <h2 class="section-title">Experience</h2>
+        <div class="timeline">
+          <div class="event">
+            <h3>American Express <span class="meta">(2023 – Present)</span></h3>
+            <p class="role">Frontend Engineer</p>
+            <ul>
+              <li>
+                Built a reusable React component library with Storybook,
+                boosting dev speed by <strong>30%</strong>.
+              </li>
+              <li>
+                Optimized Next.js SSR/SSG pages and implemented code-splitting,
+                reducing load time by <strong>25%</strong>.
+              </li>
+              <li>
+                Created responsive, mobile-first layouts with Tailwind CSS and
+                CSS Modules.
+              </li>
+              <li>
+                Improved accessibility (WCAG 2.1) across components with ARIA
+                labels and focus management.
+              </li>
+            </ul>
+          </div>
+          <div class="event">
+            <h3>Fiserv <span class="meta">(2021 – 2023)</span></h3>
+            <p class="role">Frontend Developer</p>
+            <ul>
+              <li>
+                Developed interactive dashboards in React + D3.js, adding
+                drill-down and real-time data features.
+              </li>
+              <li>
+                Leveraged Apollo Client for GraphQL, optimizing data fetches and
+                state management.
+              </li>
+              <li>
+                Configured Webpack for asset bundling and lazy-loading, reducing
+                bundle size by <strong>35%</strong>.
+              </li>
+              <li>
+                Achieved <strong>90%+</strong> test coverage with Jest and React
+                Testing Library.
+              </li>
+            </ul>
+          </div>
+          <div class="event">
+            <h3>Takeo Nepal <span class="meta">(2019 – 2021)</span></h3>
+            <p class="role">Frontend Engineer</p>
+            <ul>
+              <li>
+                Built responsive Vue.js and React components, improving mobile
+                engagement by <strong>25%</strong>.
+              </li>
+              <li>
+                Implemented lazy-loading and image optimization, cutting initial
+                payload by <strong>40%</strong>.
+              </li>
+              <li>
+                Translated Figma designs into pixel-perfect HTML/CSS with
+                accessibility best practices.
+              </li>
+              <li>
+                Introduced Lighthouse audits, improving performance scores by
+                <strong>20%</strong>.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <section id="experience">
+      <div class="container">
+        <h2 class="section-title">Experience</h2>
+        <div class="timeline">
+          <!-- American Express -->
+          <div class="event">
+            <h3>
+              American Express <span class="meta">(Jun 2023 – Present)</span>
+            </h3>
+            <p class="role">Senior Front-End Engineer</p>
+            <ul>
+              <li>
+                Built a Storybook-driven React/Next.js component library,
+                reducing new feature delivery time by <strong>30%</strong>.
+              </li>
+              <li>
+                Optimized Next.js SSR and code-splitting—cutting initial page
+                load by <strong>25%</strong>.
+              </li>
+              <li>
+                Enhanced WCAG 2.1 accessibility with ARIA attributes, focus
+                management, and color‐contrast improvements.
+              </li>
+              <li>
+                Implemented Tailwind CSS and CSS Modules for responsive,
+                mobile-first layouts.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Fiserv -->
+          <div class="event">
+            <h3>Fiserv <span class="meta">(Sep 2021 – May 2023)</span></h3>
+            <p class="role">Front-End Developer</p>
+            <ul>
+              <li>
+                Developed React dashboards with D3.js visualizations, adding
+                drill-down and real-time data updates.
+              </li>
+              <li>
+                Leveraged Apollo Client for GraphQL, eliminating redundant
+                fetches and improving UI responsiveness.
+              </li>
+              <li>
+                Configured Webpack for code-splitting and tree-shaking, reducing
+                bundle size by <strong>35%</strong>.
+              </li>
+              <li>
+                Achieved over <strong>90% test coverage</strong> using Jest and
+                React Testing Library, ensuring UI reliability.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Oppenheimer Holdings -->
+          <div class="event">
+            <h3>
+              Oppenheimer Holdings
+              <span class="meta">(Jun 2019 – Aug 2021)</span>
+            </h3>
+            <p class="role">Software Engineer</p>
+            <ul>
+              <li>
+                Built interactive market-data dashboards in React and D3.js,
+                improving traders’ insight into live trends.
+              </li>
+              <li>
+                Implemented lazy-loading and React memoization, reducing
+                component render times by <strong>30%</strong>.
+              </li>
+              <li>
+                Translated Figma mockups into pixel-perfect, accessible HTML/CSS
+                components with WCAG best practices.
+              </li>
+              <li>
+                Introduced Lighthouse audits to track performance, raising
+                overall scores by <strong>20%</strong>.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="project-list">
+          <div class="project-item">
+            <div class="project-info">
+              <h3>Takeo.AI</h3>
+              <a
+                href="https://takeo.ai"
+                target="_blank"
+                aria-label="Takeo.AI Site"
+                ><i class="fas fa-globe"></i> Website</a
+              >
+              <p>
+                Online tech education platform offering bootcamps in software
+                engineering, data analytics, and AI; avg graduate salary $123K.
+              </p>
+              <div class="project-meta">Avg Salary: $123K</div>
+            </div>
+            <div class="project-image">
+              <img src="takeo.PNG" alt="Takeo.AI Screenshot" />
+            </div>
+          </div>
+          <div class="project-item">
+            <div class="project-info">
+              <h3>Dristicode Solutions</h3>
+              <a
+                href="https://www.dristicode.com.np/index.html"
+                target="_blank"
+                aria-label="Dristicode Site"
+                ><i class="fas fa-globe"></i> Website</a
+              >
+              <p>
+                Nepal-based firm delivering custom software for finance,
+                healthcare, e-commerce, education, and logistics with focus on
+                security and support.
+              </p>
+              <div class="project-meta">Location: Nepal</div>
+            </div>
+            <div class="project-image">
+              <img src="dristicode.PNG" alt="Dristicode Screenshot" />
+            </div>
+          </div>
+          <div class="project-item">
+            <div class="project-info">
+              <h3>TyroSoft</h3>
+              <a
+                href="https://tyrosoft.com.np/"
+                target="_blank"
+                aria-label="TyroSoft Site"
+                ><i class="fas fa-globe"></i> Website</a
+              >
+              <p>
+                Provider of mobile/web apps and UI/UX design, managing brands
+                like Babal.Host & TyroCity.com using Laravel, Vue.js, AngleJS,
+                etc.
+              </p>
+              <div class="project-meta">Brands: Babal.Host, TyroCity.com</div>
+            </div>
+            <div class="project-image">
+              <img src="tyrosoft.PNG" alt="TyroSoft Screenshot" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools">
+      <div class="container">
+        <h2 class="section-title">Core Skills</h2>
+        <div class="tools-grid">
+          <div class="tool">
+            <i class="fab fa-js-square"></i><span>JavaScript</span>
+          </div>
+          <div class="tool"><i class="fab fa-react"></i><span>React</span></div>
+          <div class="tool">
+            <i class="fab fa-vuejs"></i><span>Vue.js</span>
+          </div>
+          <div class="tool">
+            <i class="fab fa-node"></i><span>Node.js</span>
+          </div>
+          <div class="tool">
+            <i class="fab fa-css3-alt"></i><span>CSS3</span>
+          </div>
+          <div class="tool"><i class="fab fa-html5"></i><span>HTML5</span></div>
+          <div class="tool"><i class="fab fa-npm"></i><span>npm</span></div>
+          <div class="tool">
+            <i class="fab fa-docker"></i><span>Docker</span>
+          </div>
+          <div class="tool"><i class="fab fa-aws"></i><span>AWS</span></div>
+          <div class="tool">
+            <i class="fab fa-graphql"></i><span>GraphQL</span>
+          </div>
+          <div class="tool">
+            <i class="fas fa-server"></i><span>Next.js</span>
+          </div>
+          <div class="tool">
+            <i class="fas fa-code-branch"></i><span>Git</span>
+          </div>
+          <div class="tool">
+            <i class="fas fa-palette"></i><span>Tailwind CSS</span>
+          </div>
+          <div class="tool"><i class="fas fa-vial"></i><span>Jest</span></div>
+          <div class="tool">
+            <i class="fas fa-microscope"></i><span>Cypress</span>
+          </div>
+          <div class="tool">
+            <i class="fab fa-storybook"></i><span>Storybook</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <h2 class="section-title">Connect with Me</h2>
+        <p>
+          Email:
+          <a
+            href="mailto:ranjitsubedi108@gmail.com"
+            style="color: var(--accent)"
+            >ranjitsubedi108@gmail.com</a
+          >
+          | LinkedIn:
+          <a
+            href="https://linkedin.com/in/ranjitsubedi"
+            target="_blank"
+            style="color: var(--accent)"
+            >in/ranjitsubedi</a
+          >
+        </p>
+        <div class="social">
+          <a
+            href="https://github.com/ranjitcode"
+            target="_blank"
+            aria-label="GitHub"
+            ><i class="fab fa-github"></i
+          ></a>
+          <a
+            href="https://linkedin.com/in/ranjitsubedi"
+            target="_blank"
+            aria-label="LinkedIn"
+            ><i class="fab fa-linkedin"></i
+          ></a>
+          <a href="https://twitter.com/" target="_blank" aria-label="Twitter"
+            ><i class="fab fa-twitter"></i
+          ></a>
+        </div>
+      </div>
+    </section>
+
+    <footer>&copy; 2025 Ranjit Subedi. All rights reserved.</footer>
+
+    <script>
+      // Theme toggle
+      document
+        .getElementById("theme-toggle")
+        .addEventListener("click", () =>
+          document.body.classList.toggle("light-mode")
+        );
+      // Scroll progress
+      window.addEventListener("scroll", () => {
+        const docHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = (window.scrollY / docHeight) * 100;
+        document.getElementById("progress-bar").style.width = scrolled + "%";
+      });
+      // Reveal sections
+      const sections = document.querySelectorAll("section");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(
+            (entry) =>
+              entry.isIntersecting && entry.target.classList.add("visible")
+          );
+        },
+        { threshold: 0.2 }
+      );
+      sections.forEach((sec) => observer.observe(sec));
+    </script>
+  </body>
+</html>

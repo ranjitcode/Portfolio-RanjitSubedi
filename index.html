@@ -3,8 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <!-- Favicon -->
-    <link rel="icon" href="https://cdn.jsdelivr.net/npm/simple-icons@v14/icons/react.svg" type="image/svg+xml" />
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      href="https://cdn.jsdelivr.net/npm/simple-icons@v14/icons/react.svg"
+      type="image/svg+xml"
+    />
     <title>Ranjit Subedi | Senior Frontend Engineer</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
@@ -423,11 +427,71 @@
         justify-content: left;
         align-items: left;
       }
+
+      /* added now */
+      /* hide burger by default */
+      .burger {
+        display: none;
+      }
+
+      /* mobile-specific */
+      @media (max-width: 768px) {
+        #theme-toggle {
+          /* push it 3rem from the right edge */
+          right: 3rem !important;
+        }
+        /* hide the links until menu is opened */
+        .nav-container {
+          display: none;
+          flex-direction: column;
+          position: absolute;
+          top: 60px; /* just below your fixed nav */
+          right: 0;
+          background: var(--bg-alt);
+          width: 200px;
+          padding: 1rem 0 1rem 1rem;
+        }
+        /* show when toggled */
+        .nav-container.active {
+          display: flex;
+        }
+        /* show our burger icon */
+        .burger {
+          display: block;
+          position: fixed;
+          top: 1rem;
+          right: 1rem; /* sits just left of the theme toggle */
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          color: var(--text);
+          z-index: 1001;
+          cursor: pointer;
+        }
+      }
+
+      @media (max-width: 768px) {
+        /* Stack each project’s details above its image */
+        #projects .project-item {
+          flex-direction: column !important;
+          align-items: flex-start; /* keep text left-aligned */
+        }
+
+        /* Give a little breathing room between details and image */
+        #projects .project-item .project-image {
+          margin-top: 1rem;
+          width: 100%; /* ensure it fills the container */
+        }
+      }
     </style>
   </head>
   <body>
     <div id="progress-bar"></div>
     <nav>
+      <!-- added now -->
+      <button id="menu-toggle" class="burger">
+        <i class="fas fa-bars"></i>
+      </button>
       <div class="nav-container">
         <a href="#intro">Home</a>
         <a href="#about">About</a>
@@ -823,6 +887,14 @@
         { threshold: 0.2 }
       );
       sections.forEach((sec) => observer.observe(sec));
+
+      // Added now
+      // MENU TOGGLE
+      const menuToggle = document.getElementById("menu-toggle");
+      const navContainer = document.querySelector(".nav-container");
+      menuToggle.addEventListener("click", () => {
+        navContainer.classList.toggle("active");
+      });
     </script>
   </body>
 </html>
